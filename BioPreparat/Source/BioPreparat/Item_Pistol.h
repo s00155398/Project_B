@@ -23,6 +23,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
 	class USoundCue* PistolFireSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	class USoundCue* PistolDryFireSound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Animation")
 	UAnimMontage* Pistol_FireAnimation;
 
@@ -41,6 +44,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Weapon")
 	int CurrentAmmo;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Item | Weapon")
+	TSubclassOf<class AProjectile> Projectile;
+
 	// Cannot add a UFUNCTION MACRO as it already has it in the parent class
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
@@ -48,6 +54,9 @@ public:
 	void FirePistol();
 	UFUNCTION()
 	void ReloadPistol();
+
+	UFUNCTION()
+	void SpawnProjectile();
 
 	void Equip(class AProtagonist* Character);
 

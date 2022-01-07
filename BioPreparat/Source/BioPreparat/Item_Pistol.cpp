@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Projectile_Pistol.h"
 
 AItem_Pistol::AItem_Pistol() {
 	PistolMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Pistol Mesh"));
@@ -36,24 +37,43 @@ void AItem_Pistol::FirePistol() {
 		PistolAnimInstance = PistolMesh->GetAnimInstance();
 		if (MuzzleFlash)
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, PistolMesh->GetSocketLocation("muzzle_socket"), OwningCharacter->GetViewRotation());
+			UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, PistolMesh, "muzzle_socket", PistolMesh->GetSocketLocation("muzzle_socket"), OwningCharacter->GetViewRotation(), EAttachLocation::KeepWorldPosition, false);
+
 			if (PistolAnimInstance != nullptr && CurrentAmmo > 1)
 			{
+
 				PistolAnimInstance->Montage_Play(Pistol_FireAnimation, 1.0f);
-				UE_LOG(LogTemp, Warning, TEXT("Pistol Fire!"));
 			}
 			else if(PistolAnimInstance != nullptr && CurrentAmmo == 1 && Pistol_FireToEmptyAnimation)
 			{
 				PistolAnimInstance->Montage_Play(Pistol_FireToEmptyAnimation, 1.0f);
-				UE_LOG(LogTemp, Warning, TEXT("Pistol Fire!"));
 			}
-			CurrentAmmo--;
+			SpawnProjectile();
 		}
+	}
+	else if(PistolDryFireSound && CurrentAmmo == 0)
+	{
+		UGameplayStatics::SpawnSound2D(GetWorld(), PistolDryFireSound);
 	}
 }
 
 void AItem_Pistol::ReloadPistol() {
 		bReloading = true;
+}
+
+void AItem_Pistol::SpawnProjectile()
+{
+	UWorld* const World = GetWorld();
+	if (Projectile)
+	{
+		CurrentAmmo--;
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+		// spawn the projectile at the muzzle
+		World->SpawnActor<AProjectile>(Projectile, PistolMesh->GetSocketLocation("muzzle_socket"), PistolMesh->GetSocketRotation("muzzle_socket"), ActorSpawnParams);
+	}
 }
 
 void AItem_Pistol::Equip(AProtagonist* Character)

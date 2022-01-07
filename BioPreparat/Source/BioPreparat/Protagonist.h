@@ -31,7 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Character | Camera")
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, Category = "Character | Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Camera")
 	class UCameraComponent* FollowCamera;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -64,6 +64,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Weapon")
 	bool bReloading;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Weapon")
+	bool bAiming;
+
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -104,6 +109,9 @@ public:
 
 	UFUNCTION()
 	void ReloadWeapon();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AimWeapon();
 
 	UFUNCTION()
 	void UnEquip(AItem* PreviouslyEquippedItem);

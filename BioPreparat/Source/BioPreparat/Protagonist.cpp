@@ -87,6 +87,9 @@ void AProtagonist::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("FireWeapon", IE_Pressed, this, &AProtagonist::FireWeapon);
 	PlayerInputComponent->BindAction("ReloadWeapon", IE_Pressed, this, &AProtagonist::ReloadWeapon);
+	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AProtagonist::AimWeapon);
+	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AProtagonist::AimWeapon);
+
 }
 
 void AProtagonist::MoveForward(float input)
@@ -207,14 +210,14 @@ void AProtagonist::FireWeapon()
 	{
 		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem))
 		{
-			if (!Pistol->bReloading && Pistol->CurrentAmmo > 0 && !bReloading)
+			if (!Pistol->bReloading && !bReloading)
 			{
 				Pistol->FirePistol();
 				if (FireAnimation_Pistol != nullptr)
 				{
 					if (MeshAnimInstance != nullptr)
 					{
-						MeshAnimInstance->Montage_Play(FireAnimation_Pistol, 1.0f);
+						MeshAnimInstance->Montage_Play(FireAnimation_Pistol, 1.0f);		
 					}
 				}
 			}
@@ -224,29 +227,9 @@ void AProtagonist::FireWeapon()
 
 void AProtagonist::ReloadWeapon()
 {
-	/*
-	MeshAnimInstance = Mesh1P->GetAnimInstance();
-	if (CurrentEquipment == EEquipStatus::EQS_Pistol)
-	{
 		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem))
 		{
-			if (!Pistol->bReloading)
-			{
-				Pistol->ReloadPistol();
-				if (ReloadAnimation_Pistol != nullptr)
-				{
-					if (MeshAnimInstance != nullptr)
-					{
-						MeshAnimInstance->Montage_Play(ReloadAnimation_Pistol, 1.0f);
-					}
-				}
-			}
-		}
-	}
-	*/
-		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem))
-		{
-			if (!Pistol->bReloading && !bReloading)
+			if (!Pistol->bReloading && !bReloading && !bAiming)
 			{
 				Pistol->ReloadPistol();
 				bReloading = true;

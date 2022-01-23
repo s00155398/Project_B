@@ -80,33 +80,42 @@ void AItem_Pistol::Equip(AProtagonist* Character)
 {
 	if (Character)
 	{
-		const USkeletalMeshSocket* RightHandSocket = Character->Mesh1P->GetSocketByName(TEXT("Pistol_Socket"));
+		OwningCharacter = Character;
 
-		if (RightHandSocket)
+		if (OwningCharacter)
 		{
-			RightHandSocket->AttachActor(this, Character->Mesh1P);
-			OwningCharacter = Character;
-			Character->CurrentEquipment = EEquipStatus::EQS_Pistol;
-			Character->HeldEquipment.Add(this);
-
-			if (Character->CurrentEquippedItem)
+			const USkeletalMeshSocket* RightHandSocket = OwningCharacter->Mesh1P->GetSocketByName(TEXT("Pistol_Socket"));
+			if (RightHandSocket)
 			{
-				Character->CurrentEquippedItem->Unequip();
-				Character->CurrentEquippedItem = nullptr;
+				RightHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
+				if (OwningCharacter->CurrentEquippedItem_Right)
+				{
+					OwningCharacter->CurrentEquippedItem_Left = OwningCharacter->CurrentEquippedItem_Right;
+					OwningCharacter->CurrentEquippedItem_Left->AttachToLeft();
+					OwningCharacter->CurrentEquippedItem_Right = this;
+					OwningCharacter->HeldEquipment.Add(this);
+					ItemState = EItemState::EIS_Equipped;
+					PlayEquipSound();
+					UE_LOG(LogTemp, Warning, TEXT("Pistol Equipped!"));
+				}
+				else
+				{
+					OwningCharacter->CurrentEquippedItem_Right = this;
+					OwningCharacter->HeldEquipment.Add(this);
+					ItemState = EItemState::EIS_Equipped;
+					PlayEquipSound();
+					UE_LOG(LogTemp, Warning, TEXT("Pistol Equipped!"));
+				}
+				OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Pistol;
 			}
-
-			Character->CurrentEquippedItem = this;
-
-			ItemState = EItemState::EIS_Equipped;
-			PlayEquipSound();
 		}
 	}
+
 }
 
 void AItem_Pistol::Equip()
 {
 	Super::Equip();
-	OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Pistol;
 }
 
 void AItem_Pistol::Unequip()

@@ -29,4 +29,8 @@ public:
 	virtual void Equip() override;
 
 	virtual void Unequip() override;
+
+	virtual void AttachToRight() override;
+
+	virtual void AttachToLeft() override;
 };

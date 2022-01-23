@@ -51,7 +51,10 @@ public:
 	TArray<AItem*> HeldEquipment;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Equipment")
-	AItem* CurrentEquippedItem;
+	AItem* CurrentEquippedItem_Right;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Equipment")
+	AItem* CurrentEquippedItem_Left;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Animation")
 	UAnimMontage* FireAnimation_Pistol;
@@ -113,8 +116,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void AimWeapon();
 
-	UFUNCTION()
-	void UnEquip(AItem* PreviouslyEquippedItem);
 	UFUNCTION()
 	void Equip(AItem* ItemToEquip);
 };

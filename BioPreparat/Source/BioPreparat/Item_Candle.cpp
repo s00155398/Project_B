@@ -4,7 +4,7 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Item_Pistol.h"
 AItem_Candle::AItem_Candle() {
 	bCandleParticles = true;
 
@@ -29,34 +29,48 @@ void AItem_Candle::Equip(AProtagonist* Character)
 {
 	if (Character)
 	{
-		const USkeletalMeshSocket* RightHandSocket = Character->Mesh1P->GetSocketByName(TEXT("Candle_Soket"));
+		OwningCharacter = Character;
 
-		if (RightHandSocket)
+		if (OwningCharacter)
 		{
-			RightHandSocket->AttachActor(this, Character->Mesh1P);
-
-			OwningCharacter = Character;
-
-			Character->CurrentEquipment = EEquipStatus::EQS_Candle;
-			Character->HeldEquipment.Add(this);
-
-			if (Character->CurrentEquippedItem)
+			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right))
 			{
-				Character->CurrentEquippedItem->Unequip();
-				Character->CurrentEquippedItem = nullptr;
+				if (OwningCharacter->CurrentEquippedItem_Left)
+				{
+					OwningCharacter->CurrentEquippedItem_Left->Unequip();
+				}
+				AttachToLeft();
+
+				OwningCharacter->CurrentEquippedItem_Left = this;
+
+				ItemState = EItemState::EIS_Equipped;
+
+				PlayEquipSound();
+
+				if (!bCandleParticles)
+				{
+					CandleParticle->Deactivate();
+				}
 			}
-
-			Character->CurrentEquippedItem = this;
-
-			ItemState = EItemState::EIS_Equipped;
-
-			PlayEquipSound();
-
-			if (!bCandleParticles)
+			else
 			{
-				CandleParticle->Deactivate();
+				if (OwningCharacter->CurrentEquippedItem_Right)
+				{
+					OwningCharacter->CurrentEquippedItem_Right->Unequip();
+				}
+				AttachToRight();
+				OwningCharacter->CurrentEquippedItem_Right = this;
+				OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Candle;
+
+				ItemState = EItemState::EIS_Equipped;
+
+				if (!bCandleParticles)
+				{
+					CandleParticle->Deactivate();
+				}
 			}
 		}
+		Character->HeldEquipment.Add(this);
 	}
 }
 
@@ -79,11 +93,54 @@ void AItem_Candle::PlayEquipSound()
 
 void AItem_Candle::Equip()
 {
-	Super::Equip();
-	OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Candle;
+	Super::Equip(); 
+	if (OwningCharacter->CurrentEquippedItem_Left == this || OwningCharacter->CurrentEquippedItem_Right == this)
+	{
+		ToggleFlame();
+	}
+	else
+	{
+		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right))
+		{
+			if (OwningCharacter->CurrentEquippedItem_Left != this) {
+				OwningCharacter->CurrentEquippedItem_Left->Unequip();
+				OwningCharacter->CurrentEquippedItem_Left = this;
+				AttachToLeft();
+			}
+
+		}
+		else if (OwningCharacter->CurrentEquippedItem_Right != this)
+		{
+			OwningCharacter->CurrentEquippedItem_Right->Unequip();
+			OwningCharacter->CurrentEquippedItem_Right = this;
+			OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Candle;
+			PlayEquipSound();
+		}
+	}
 }
 
 void AItem_Candle::Unequip()
 {
 	Super::Unequip();
+}
+
+void AItem_Candle::AttachToRight()
+{
+	const USkeletalMeshSocket* RightHandSocket = OwningCharacter->Mesh1P->GetSocketByName(TEXT("Candle_Socket_Right"));
+	if (RightHandSocket)
+	{
+		RightHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
+		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Right"));
+	}
+}
+
+void AItem_Candle::AttachToLeft()
+{
+	const USkeletalMeshSocket* LeftHandSocket = OwningCharacter->Mesh1P->GetSocketByName(TEXT("Candle_Socket_Left"));
+
+	if (LeftHandSocket)
+	{
+		LeftHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
+		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Left"));
+	}
 }

@@ -53,4 +53,9 @@ public:
 	virtual void Equip();
 	UFUNCTION()
 	virtual void Unequip();
+
+	UFUNCTION()
+	virtual void AttachToRight();
+	UFUNCTION()
+	virtual void AttachToLeft();
 };

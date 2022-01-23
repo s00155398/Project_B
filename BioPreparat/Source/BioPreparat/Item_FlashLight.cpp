@@ -8,7 +8,7 @@
 #include "Engine/SpotLight.h"
 #include "Kismet/GameplayStatics.h"
 #include "Protagonist.h"
-
+#include "Item_Pistol.h"
 AItem_FlashLight::AItem_FlashLight() {
 	FlashLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("FlashLight"));
 	FlashLight->SetupAttachment(GetRootComponent());
@@ -28,30 +28,32 @@ void AItem_FlashLight::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 
 void AItem_FlashLight::Equip(AProtagonist* Character)
 {
-		if (Character)
-		{
-			const USkeletalMeshSocket* RightHandSocket = Character->Mesh1P->GetSocketByName(TEXT("Lantern_01_Socket"));
+	if (Character){
 
-			if (RightHandSocket)
-			{
-				RightHandSocket->AttachActor(this, Character->Mesh1P);
-				OwningCharacter = Character;
-				Character->CurrentEquipment = EEquipStatus::EQS_FlashLight;
-				Character->HeldEquipment.Add(this);
-
-				if (Character->CurrentEquippedItem)
+		OwningCharacter = Character;
+		if (OwningCharacter) {
+			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right)){
+				if (OwningCharacter->CurrentEquippedItem_Left)
 				{
-					Character->CurrentEquippedItem->Unequip();
-					Character->CurrentEquippedItem = nullptr;
+					OwningCharacter->CurrentEquippedItem_Left->Unequip();
 				}
-
-				Character->CurrentEquippedItem = this;
-
+				AttachToLeft();
+				OwningCharacter->CurrentEquippedItem_Left = this;
 				ItemState = EItemState::EIS_Equipped;
-
-				PlayEquipSound();
+			}
+			else {
+				if (OwningCharacter->CurrentEquippedItem_Right)
+				{
+					OwningCharacter->CurrentEquippedItem_Right->Unequip();
+				}
+				AttachToRight();
+				OwningCharacter->CurrentEquippedItem_Right = this;
+				OwningCharacter->CurrentEquipment = EEquipStatus::EQS_FlashLight;
+				ItemState = EItemState::EIS_Equipped;
 			}
 		}
+		Character->HeldEquipment.Add(this);
+	}
 }
 
 void AItem_FlashLight::ToggleLight()
@@ -71,13 +73,53 @@ void AItem_FlashLight::PlayEquipSound()
 	}
 }
 
-void AItem_FlashLight::Equip()
-{
+void AItem_FlashLight::Equip(){
 	Super::Equip();
-	OwningCharacter->CurrentEquipment = EEquipStatus::EQS_FlashLight;
+	if (OwningCharacter->CurrentEquippedItem_Right == this || OwningCharacter->CurrentEquippedItem_Left == this)
+	{
+		ToggleLight();
+	}
+	else
+	{
+		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right))
+		{
+			if (OwningCharacter->CurrentEquippedItem_Left != this) {
+				OwningCharacter->CurrentEquippedItem_Left->Unequip();
+				OwningCharacter->CurrentEquippedItem_Left = this;
+				AttachToLeft();
+			}
+		}
+		else if (OwningCharacter->CurrentEquippedItem_Right != this) {
+			OwningCharacter->CurrentEquippedItem_Right->Unequip();
+			OwningCharacter->CurrentEquippedItem_Right = this;
+			OwningCharacter->CurrentEquipment = EEquipStatus::EQS_FlashLight;
+			PlayEquipSound();
+		}
+	}
 }
 
 void AItem_FlashLight::Unequip()
 {
 	Super::Unequip();
+}
+
+void AItem_FlashLight::AttachToRight()
+{
+	const USkeletalMeshSocket* RightHandSocket = OwningCharacter->Mesh1P->GetSocketByName(TEXT("FlashLight_Socket_Right"));
+	if (RightHandSocket)
+	{
+		RightHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
+		UE_LOG(LogTemp, Warning, TEXT("FlashLight Equipped on Right"));
+	}
+}
+
+void AItem_FlashLight::AttachToLeft()
+{
+	const USkeletalMeshSocket* LeftHandSocket = OwningCharacter->Mesh1P->GetSocketByName(TEXT("FlashLight_Socket_Left"));
+
+	if (LeftHandSocket)
+	{
+		LeftHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
+		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Left"));
+	}
 }

@@ -62,5 +62,14 @@ void AItem::Unequip()
 	SetActorTickEnabled(false);
 }
 
+void AItem::AttachToRight()
+{
+}
+
+void AItem::AttachToLeft()
+{
+}
+
+
 
 

@@ -144,15 +144,6 @@ void AProtagonist::EndSprint()
 
 void AProtagonist::EquipCandle() 
 {
-	if (CurrentEquipment == EEquipStatus::EQS_Candle)
-	{
-		if (AItem_Candle* Candle = Cast<AItem_Candle>(CurrentEquippedItem))
-		{
-			Candle->ToggleFlame();
-		}
-	}
-	else
-	{
 		for (AItem* i : HeldEquipment)
 		{
 			if (AItem_Candle* Candle = Cast<AItem_Candle>(i))
@@ -161,21 +152,10 @@ void AProtagonist::EquipCandle()
 				return;
 			}
 		}
-	}
-	
 }
 
 void AProtagonist::EquipFlashLight()
 {
-	if (CurrentEquipment == EEquipStatus::EQS_FlashLight)
-	{
-		if (AItem_FlashLight* FlashLight = Cast<AItem_FlashLight>(CurrentEquippedItem))
-		{
-			FlashLight->ToggleLight();
-		}
-	}
-	else
-	{
 		for (AItem* i : HeldEquipment)
 		{
 			if (AItem_FlashLight* FlashLight = Cast<AItem_FlashLight>(i))
@@ -184,7 +164,6 @@ void AProtagonist::EquipFlashLight()
 				return;
 			}
 		}
-	}
 }
 
 void AProtagonist::EquipPistol()
@@ -208,7 +187,7 @@ void AProtagonist::FireWeapon()
 
 	if (CurrentEquipment == EEquipStatus::EQS_Pistol)
 	{
-		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem))
+		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem_Right))
 		{
 			if (!Pistol->bReloading && !bReloading)
 			{
@@ -227,7 +206,7 @@ void AProtagonist::FireWeapon()
 
 void AProtagonist::ReloadWeapon()
 {
-		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem))
+		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(CurrentEquippedItem_Right))
 		{
 			if (!Pistol->bReloading && !bReloading && !bAiming)
 			{
@@ -239,15 +218,8 @@ void AProtagonist::ReloadWeapon()
 
 void AProtagonist::Equip(AItem* ItemToEquip)
 {
-	if (CurrentEquippedItem && ItemToEquip)
+	if (ItemToEquip)
 	{
-		CurrentEquippedItem->Unequip();
 		ItemToEquip->Equip();
-		CurrentEquippedItem = ItemToEquip;
 	}
-}
-
-void AProtagonist::UnEquip(AItem* PreviouslyEquippedItem)
-{
-	CurrentEquippedItem = PreviouslyEquippedItem;
 }

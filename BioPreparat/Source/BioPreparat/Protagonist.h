@@ -71,6 +71,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Weapon")
 	bool bAiming;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Weapon")
+	bool bMelee;
 	
 
 protected:
@@ -118,4 +120,7 @@ public:
 
 	UFUNCTION()
 	void Equip(AItem* ItemToEquip);
+
+	UFUNCTION()
+	void MeleeAttack();
 };

@@ -39,14 +39,8 @@ void AItem_Candle::Equip(AProtagonist* Character)
 				{
 					OwningCharacter->CurrentEquippedItem_Left->Unequip();
 				}
-				AttachToLeft();
-
-				OwningCharacter->CurrentEquippedItem_Left = this;
-
-				ItemState = EItemState::EIS_Equipped;
-
+				AttachToLeft();	
 				PlayEquipSound();
-
 				if (!bCandleParticles)
 				{
 					CandleParticle->Deactivate();
@@ -59,9 +53,6 @@ void AItem_Candle::Equip(AProtagonist* Character)
 					OwningCharacter->CurrentEquippedItem_Right->Unequip();
 				}
 				AttachToRight();
-				OwningCharacter->CurrentEquippedItem_Right = this;
-				OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Candle;
-
 				ItemState = EItemState::EIS_Equipped;
 
 				if (!bCandleParticles)
@@ -71,6 +62,7 @@ void AItem_Candle::Equip(AProtagonist* Character)
 			}
 		}
 		Character->HeldEquipment.Add(this);
+		ItemState = EItemState::EIS_Equipped;
 	}
 }
 
@@ -104,7 +96,6 @@ void AItem_Candle::Equip()
 		{
 			if (OwningCharacter->CurrentEquippedItem_Left != this) {
 				OwningCharacter->CurrentEquippedItem_Left->Unequip();
-				OwningCharacter->CurrentEquippedItem_Left = this;
 				AttachToLeft();
 			}
 
@@ -131,6 +122,8 @@ void AItem_Candle::AttachToRight()
 	{
 		RightHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
 		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Right"));
+		OwningCharacter->CurrentEquippedItem_Right = this;
+		OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Candle;
 	}
 }
 
@@ -142,5 +135,6 @@ void AItem_Candle::AttachToLeft()
 	{
 		LeftHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
 		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Left"));
+		OwningCharacter->CurrentEquippedItem_Left = this;
 	}
 }

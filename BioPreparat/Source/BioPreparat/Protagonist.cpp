@@ -44,6 +44,7 @@ AProtagonist::AProtagonist()
 	CurrentEquipment = EEquipStatus::EQS_Empty;
 
 	bReloading = false;
+	bMelee = false;
 }
 
 // Called when the game starts or when spawned
@@ -89,6 +90,7 @@ void AProtagonist::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("ReloadWeapon", IE_Pressed, this, &AProtagonist::ReloadWeapon);
 	PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AProtagonist::AimWeapon);
 	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AProtagonist::AimWeapon);
+	PlayerInputComponent->BindAction("Melee", IE_Pressed, this, &AProtagonist::MeleeAttack);
 
 }
 
@@ -134,7 +136,10 @@ void AProtagonist::LookUpAtRate(float Rate)
 
 void AProtagonist::BeginSprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 600;
+	if (!bAiming && !bMelee)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 600;
+	}
 }
 
 void AProtagonist::EndSprint()
@@ -144,6 +149,8 @@ void AProtagonist::EndSprint()
 
 void AProtagonist::EquipCandle() 
 {
+	if (!bMelee)
+	{
 		for (AItem* i : HeldEquipment)
 		{
 			if (AItem_Candle* Candle = Cast<AItem_Candle>(i))
@@ -152,10 +159,13 @@ void AProtagonist::EquipCandle()
 				return;
 			}
 		}
+	}
 }
 
 void AProtagonist::EquipFlashLight()
 {
+	if (!bMelee)
+	{
 		for (AItem* i : HeldEquipment)
 		{
 			if (AItem_FlashLight* FlashLight = Cast<AItem_FlashLight>(i))
@@ -164,11 +174,12 @@ void AProtagonist::EquipFlashLight()
 				return;
 			}
 		}
+	}
 }
 
 void AProtagonist::EquipPistol()
 {
-	if (CurrentEquipment != EEquipStatus::EQS_Pistol)
+	if (CurrentEquipment != EEquipStatus::EQS_Pistol && !bMelee)
 	{
 		for (AItem* i : HeldEquipment)
 		{
@@ -221,5 +232,13 @@ void AProtagonist::Equip(AItem* ItemToEquip)
 	if (ItemToEquip)
 	{
 		ItemToEquip->Equip();
+	}
+}
+
+void AProtagonist::MeleeAttack()
+{
+	if (CurrentEquipment != EEquipStatus::EQS_Pistol && !bMelee)
+	{
+		bMelee = true;
 	}
 }

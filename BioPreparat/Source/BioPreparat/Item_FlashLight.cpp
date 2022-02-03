@@ -38,8 +38,6 @@ void AItem_FlashLight::Equip(AProtagonist* Character)
 					OwningCharacter->CurrentEquippedItem_Left->Unequip();
 				}
 				AttachToLeft();
-				OwningCharacter->CurrentEquippedItem_Left = this;
-				ItemState = EItemState::EIS_Equipped;
 			}
 			else {
 				if (OwningCharacter->CurrentEquippedItem_Right)
@@ -47,12 +45,10 @@ void AItem_FlashLight::Equip(AProtagonist* Character)
 					OwningCharacter->CurrentEquippedItem_Right->Unequip();
 				}
 				AttachToRight();
-				OwningCharacter->CurrentEquippedItem_Right = this;
-				OwningCharacter->CurrentEquipment = EEquipStatus::EQS_FlashLight;
-				ItemState = EItemState::EIS_Equipped;
 			}
 		}
 		Character->HeldEquipment.Add(this);
+		ItemState = EItemState::EIS_Equipped;
 	}
 }
 
@@ -85,7 +81,6 @@ void AItem_FlashLight::Equip(){
 		{
 			if (OwningCharacter->CurrentEquippedItem_Left != this) {
 				OwningCharacter->CurrentEquippedItem_Left->Unequip();
-				OwningCharacter->CurrentEquippedItem_Left = this;
 				AttachToLeft();
 			}
 		}
@@ -110,6 +105,8 @@ void AItem_FlashLight::AttachToRight()
 	{
 		RightHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
 		UE_LOG(LogTemp, Warning, TEXT("FlashLight Equipped on Right"));
+		OwningCharacter->CurrentEquippedItem_Right = this;
+		OwningCharacter->CurrentEquipment = EEquipStatus::EQS_FlashLight;
 	}
 }
 
@@ -121,5 +118,6 @@ void AItem_FlashLight::AttachToLeft()
 	{
 		LeftHandSocket->AttachActor(this, OwningCharacter->Mesh1P);
 		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Left"));
+		OwningCharacter->CurrentEquippedItem_Left = this;
 	}
 }

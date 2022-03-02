@@ -1,0 +1,14 @@
+﻿  Using 'git status' to determine working set for adaptive non-unity build (C:\Users\gerar\Documents\GitHub\Project_B).
+  Building BioPreparatEditor...
+  Using Visual Studio 2019 14.29.30140 toolchain (C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133) and Windows 10.0.16299.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+  Building 6 actions with 16 processes...
+    [1/6] Item_Candle.cpp
+    [2/6] Item_FlashLight.cpp
+    [3/6] Item_Pistol.cpp
+    [4/6] UE4Editor-BioPreparat-0024.lib
+       Creating library C:\Users\gerar\Documents\GitHub\Project_B\BioPreparat\Intermediate\Build\Win64\UE4Editor\Development\BioPreparat\UE4Editor-BioPreparat-0024.lib and object C:\Users\gerar\Documents\GitHub\Project_B\BioPreparat\Intermediate\Build\Win64\UE4Editor\Development\BioPreparat\UE4Editor-BioPreparat-0024.exp
+    [5/6] UE4Editor-BioPreparat-0024.dll
+       Creating library C:\Users\gerar\Documents\GitHub\Project_B\BioPreparat\Intermediate\Build\Win64\UE4Editor\Development\BioPreparat\UE4Editor-BioPreparat-0024.suppressed.lib and object C:\Users\gerar\Documents\GitHub\Project_B\BioPreparat\Intermediate\Build\Win64\UE4Editor\Development\BioPreparat\UE4Editor-BioPreparat-0024.suppressed.exp
+    [6/6] BioPreparatEditor.target
+  Total time in Parallel executor: 8.46 seconds
+  Total execution time: 9.19 seconds

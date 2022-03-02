@@ -58,10 +58,7 @@ public:
 	UFUNCTION()
 	void SpawnProjectile();
 
-	void Equip(class AProtagonist* Character);
+	virtual void Equip(class AProtagonist* Character);
 
-	virtual void Equip() override;
-
-	virtual void Unequip() override;
-
+	virtual void Swap(bool val) override;
 };

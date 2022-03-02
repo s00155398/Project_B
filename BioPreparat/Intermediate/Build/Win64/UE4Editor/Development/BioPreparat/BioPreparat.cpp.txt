@@ -1,0 +1,2 @@
+C:\Users\gerar\Documents\GitHub\Project_B\BioPreparat\Intermediate\Build\Win64\UE4Editor\Development\BioPreparat\Definitions.BioPreparat.h
+C:\Users\gerar\Documents\GitHub\Project_B\BioPreparat\Source\BioPreparat\BioPreparat.h

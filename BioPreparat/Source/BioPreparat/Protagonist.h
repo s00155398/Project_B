@@ -51,6 +51,9 @@ public:
 	TArray<AItem*> HeldEquipment;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Equipment")
+	AItem* PickUpItem;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Equipment")
 	AItem* CurrentEquippedItem_Right;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Equipment")
@@ -120,6 +123,9 @@ public:
 
 	UFUNCTION()
 	void Equip(AItem* ItemToEquip);
+
+	UFUNCTION()
+	void PickUp();
 
 	UFUNCTION()
 	void MeleeAttack();

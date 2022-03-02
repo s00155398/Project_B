@@ -16,14 +16,7 @@ AItem_FlashLight::AItem_FlashLight() {
 
 void AItem_FlashLight::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && (ItemState == EItemState::EIS_Pickup))
-	{
-		AProtagonist* Main = Cast<AProtagonist>(OtherActor);
-		if (Main)
-		{
-			Equip(Main);
-		}
-	}
+	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
 
 void AItem_FlashLight::Equip(AProtagonist* Character)
@@ -31,23 +24,19 @@ void AItem_FlashLight::Equip(AProtagonist* Character)
 	if (Character){
 
 		OwningCharacter = Character;
+
 		if (OwningCharacter) {
+
 			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right)){
-				if (OwningCharacter->CurrentEquippedItem_Left)
-				{
-					OwningCharacter->CurrentEquippedItem_Left->Unequip();
-				}
-				AttachToLeft();
+				 this->Swap(true);
+				 AttachToLeft();
 			}
 			else {
-				if (OwningCharacter->CurrentEquippedItem_Right)
-				{
-					OwningCharacter->CurrentEquippedItem_Right->Unequip();
-				}
+				this->Swap(true);
 				AttachToRight();
 			}
 		}
-		Character->HeldEquipment.Add(this);
+		OwningCharacter->HeldEquipment.Add(this);
 		ItemState = EItemState::EIS_Equipped;
 	}
 }
@@ -57,7 +46,7 @@ void AItem_FlashLight::ToggleLight()
 	if (FlashLight)
 	{
 		FlashLight->ToggleVisibility();
-		PlayEquipSound();
+		//PlayEquipSound();
 	}
 }
 
@@ -69,8 +58,8 @@ void AItem_FlashLight::PlayEquipSound()
 	}
 }
 
-void AItem_FlashLight::Equip(){
-	Super::Equip();
+void AItem_FlashLight::Swap(bool val){
+	Super::Swap(val);
 	if (OwningCharacter->CurrentEquippedItem_Right == this || OwningCharacter->CurrentEquippedItem_Left == this)
 	{
 		ToggleLight();
@@ -79,23 +68,25 @@ void AItem_FlashLight::Equip(){
 	{
 		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right))
 		{
-			if (OwningCharacter->CurrentEquippedItem_Left != this) {
-				OwningCharacter->CurrentEquippedItem_Left->Unequip();
-				AttachToLeft();
-			}
+				if (OwningCharacter->CurrentEquippedItem_Left != this) {
+					if (OwningCharacter->CurrentEquippedItem_Left)
+					{
+						OwningCharacter->CurrentEquippedItem_Left->Swap(false);
+					}
+					OwningCharacter->CurrentEquippedItem_Left = this;
+					AttachToLeft();
+				}
 		}
 		else if (OwningCharacter->CurrentEquippedItem_Right != this) {
-			OwningCharacter->CurrentEquippedItem_Right->Unequip();
+			if (OwningCharacter->CurrentEquippedItem_Right)
+			{
+				OwningCharacter->CurrentEquippedItem_Right->Swap(false);
+			}
 			OwningCharacter->CurrentEquippedItem_Right = this;
+
 			OwningCharacter->CurrentEquipment = EEquipStatus::EQS_FlashLight;
-			PlayEquipSound();
 		}
 	}
-}
-
-void AItem_FlashLight::Unequip()
-{
-	Super::Unequip();
 }
 
 void AItem_FlashLight::AttachToRight()

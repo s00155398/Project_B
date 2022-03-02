@@ -50,10 +50,9 @@ public:
 	virtual void PlayEquipSound();
 
 	UFUNCTION()
-	virtual void Equip();
+	virtual void Swap(bool val);
 	UFUNCTION()
-	virtual void Unequip();
-
+	virtual void Equip(class AProtagonist* Character);
 	UFUNCTION()
 	virtual void AttachToRight();
 	UFUNCTION()

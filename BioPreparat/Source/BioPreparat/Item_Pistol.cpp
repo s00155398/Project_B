@@ -21,14 +21,7 @@ AItem_Pistol::AItem_Pistol() {
 
 void AItem_Pistol::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && (ItemState == EItemState::EIS_Pickup))
-	{
-		AProtagonist* Main = Cast<AProtagonist>(OtherActor);
-		if (Main)
-		{
-			Equip(Main);
-		}
-	}
+	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
 
 void AItem_Pistol::FirePistol() {
@@ -95,7 +88,7 @@ void AItem_Pistol::Equip(AProtagonist* Character)
 					OwningCharacter->CurrentEquippedItem_Right = this;
 					OwningCharacter->HeldEquipment.Add(this);
 					ItemState = EItemState::EIS_Equipped;
-					PlayEquipSound();
+					//PlayEquipSound();
 					UE_LOG(LogTemp, Warning, TEXT("Pistol Equipped!"));
 				}
 				else
@@ -103,7 +96,7 @@ void AItem_Pistol::Equip(AProtagonist* Character)
 					OwningCharacter->CurrentEquippedItem_Right = this;
 					OwningCharacter->HeldEquipment.Add(this);
 					ItemState = EItemState::EIS_Equipped;
-					PlayEquipSound();
+					//PlayEquipSound();
 					UE_LOG(LogTemp, Warning, TEXT("Pistol Equipped!"));
 				}
 				OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Pistol;
@@ -113,13 +106,8 @@ void AItem_Pistol::Equip(AProtagonist* Character)
 
 }
 
-void AItem_Pistol::Equip()
+void AItem_Pistol::Swap(bool val)
 {
-	Super::Equip();
-}
-
-void AItem_Pistol::Unequip()
-{
-	Super::Unequip();
+	Super::Swap(val);
 }
 

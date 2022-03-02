@@ -92,6 +92,8 @@ void AProtagonist::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Aim", IE_Released, this, &AProtagonist::AimWeapon);
 	PlayerInputComponent->BindAction("Melee", IE_Pressed, this, &AProtagonist::MeleeAttack);
 
+	PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &AProtagonist::PickUp);
+
 }
 
 void AProtagonist::MoveForward(float input)
@@ -155,7 +157,7 @@ void AProtagonist::EquipCandle()
 		{
 			if (AItem_Candle* Candle = Cast<AItem_Candle>(i))
 			{
-				Equip(Candle);
+				Candle->Swap(true);
 				return;
 			}
 		}
@@ -170,7 +172,7 @@ void AProtagonist::EquipFlashLight()
 		{
 			if (AItem_FlashLight* FlashLight = Cast<AItem_FlashLight>(i))
 			{
-				Equip(FlashLight);
+				FlashLight->Swap(true);
 				return;
 			}
 		}
@@ -185,7 +187,7 @@ void AProtagonist::EquipPistol()
 		{
 			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(i))
 			{
-				Equip(Pistol);
+				Pistol->Swap(true);
 				return;
 			}
 		}
@@ -231,7 +233,16 @@ void AProtagonist::Equip(AItem* ItemToEquip)
 {
 	if (ItemToEquip)
 	{
-		ItemToEquip->Equip();
+		ItemToEquip->Equip(this);
+		PickUpItem = nullptr;
+	}
+}
+
+void AProtagonist::PickUp()
+{
+	if (PickUpItem)
+	{
+		Equip(PickUpItem);
 	}
 }
 

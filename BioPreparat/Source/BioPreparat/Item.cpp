@@ -3,6 +3,7 @@
 
 #include "Item.h"
 #include "Components/SphereComponent.h"
+#include "Protagonist.h"
 // Sets default values
 AItem::AItem()
 {
@@ -38,11 +39,27 @@ void AItem::Tick(float DeltaTime)
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Super::OnOverlapBegin()"));
+	if (OtherActor && (ItemState == EItemState::EIS_Pickup))
+	{
+		AProtagonist* Main = Cast<AProtagonist>(OtherActor);
+		if (Main)
+		{
+			Main->PickUpItem = this;
+		}
+	}
 }
 
 void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Super::OnOverlapEnd()"));
+	if (OtherActor && (ItemState == EItemState::EIS_Pickup))
+	{
+		AProtagonist* Main = Cast<AProtagonist>(OtherActor);
+		if (Main)
+		{
+			Main->PickUpItem = nullptr;
+		}
+	}
 }
 
 void AItem::PlayEquipSound()
@@ -50,24 +67,24 @@ void AItem::PlayEquipSound()
 
 }
 
-void AItem::Equip()
+void AItem::Swap(bool val)
 {
-	SetActorHiddenInGame(false);
-	SetActorTickEnabled(true);
+	SetActorHiddenInGame(!val);
+	SetActorTickEnabled(val);
 }
 
-void AItem::Unequip()
+void AItem::Equip(class AProtagonist* Character)
 {
-	SetActorHiddenInGame(true);
-	SetActorTickEnabled(false);
 }
 
 void AItem::AttachToRight()
 {
+
 }
 
 void AItem::AttachToLeft()
 {
+
 }
 
 

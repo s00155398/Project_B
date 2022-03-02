@@ -14,6 +14,8 @@ AItem_Candle::AItem_Candle() {
 
 void AItem_Candle::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp,  OtherBodyIndex,  bFromSweep, SweepResult);
+	/*
 	if (OtherActor && (ItemState == EItemState::EIS_Pickup))
 	{
 		AProtagonist* Main = Cast<AProtagonist>(OtherActor);
@@ -22,8 +24,14 @@ void AItem_Candle::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 			Equip(Main);
 		}
 	}
+	*/
 }
 
+
+void AItem_Candle::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp,  OtherBodyIndex);
+}
 
 void AItem_Candle::Equip(AProtagonist* Character)
 {
@@ -33,25 +41,15 @@ void AItem_Candle::Equip(AProtagonist* Character)
 
 		if (OwningCharacter)
 		{
-			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right))
+			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right)) // if the pistol is equipped
 			{
-				if (OwningCharacter->CurrentEquippedItem_Left)
-				{
-					OwningCharacter->CurrentEquippedItem_Left->Unequip();
-				}
+				this->Swap(true);
 				AttachToLeft();	
-				PlayEquipSound();
-				if (!bCandleParticles)
-				{
-					CandleParticle->Deactivate();
-				}
 			}
 			else
 			{
-				if (OwningCharacter->CurrentEquippedItem_Right)
-				{
-					OwningCharacter->CurrentEquippedItem_Right->Unequip();
-				}
+				this->Swap(true);
+
 				AttachToRight();
 				ItemState = EItemState::EIS_Equipped;
 
@@ -61,7 +59,7 @@ void AItem_Candle::Equip(AProtagonist* Character)
 				}
 			}
 		}
-		Character->HeldEquipment.Add(this);
+		OwningCharacter->HeldEquipment.Add(this);
 		ItemState = EItemState::EIS_Equipped;
 	}
 }
@@ -71,7 +69,7 @@ void AItem_Candle::ToggleFlame() {
 	if (CandleParticle)
 	{
 		CandleParticle->ToggleActive();
-		PlayEquipSound();
+		//PlayEquipSound();
 	}
 }
 
@@ -83,9 +81,9 @@ void AItem_Candle::PlayEquipSound()
 	}
 }
 
-void AItem_Candle::Equip()
+void AItem_Candle::Swap(bool val)
 {
-	Super::Equip(); 
+	Super::Swap(val);
 	if (OwningCharacter->CurrentEquippedItem_Left == this || OwningCharacter->CurrentEquippedItem_Right == this)
 	{
 		ToggleFlame();
@@ -95,24 +93,24 @@ void AItem_Candle::Equip()
 		if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right))
 		{
 			if (OwningCharacter->CurrentEquippedItem_Left != this) {
-				OwningCharacter->CurrentEquippedItem_Left->Unequip();
+				if (OwningCharacter->CurrentEquippedItem_Left)
+				{
+					OwningCharacter->CurrentEquippedItem_Left->Swap(false);
+				}
+				OwningCharacter->CurrentEquippedItem_Left = this;
 				AttachToLeft();
 			}
-
 		}
-		else if (OwningCharacter->CurrentEquippedItem_Right != this)
-		{
-			OwningCharacter->CurrentEquippedItem_Right->Unequip();
+		else if (OwningCharacter->CurrentEquippedItem_Right != this) {
+			if (OwningCharacter->CurrentEquippedItem_Right)
+			{
+				OwningCharacter->CurrentEquippedItem_Right->Swap(false);
+			}
 			OwningCharacter->CurrentEquippedItem_Right = this;
+
 			OwningCharacter->CurrentEquipment = EEquipStatus::EQS_Candle;
-			PlayEquipSound();
 		}
 	}
-}
-
-void AItem_Candle::Unequip()
-{
-	Super::Unequip();
 }
 
 void AItem_Candle::AttachToRight()

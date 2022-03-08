@@ -233,7 +233,7 @@ void AProtagonist::Equip(AItem* ItemToEquip)
 {
 	if (ItemToEquip)
 	{
-		ItemToEquip->Equip(this);
+		ItemToEquip->EquipOnPrompt(this);
 		PickUpItem = nullptr;
 	}
 }

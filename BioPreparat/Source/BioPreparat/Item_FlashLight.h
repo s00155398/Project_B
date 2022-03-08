@@ -19,8 +19,6 @@ public:
 	// Cannot add a UFUNCTION MACRO as it already has it in the parent class
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
-	virtual void Equip(class AProtagonist* Character);
-
 	UFUNCTION()
 	void ToggleLight();
 
@@ -31,4 +29,6 @@ public:
 	virtual void AttachToRight() override;
 
 	virtual void AttachToLeft() override;
+
+	virtual void EquipOnPrompt(AProtagonist* Character) override;
 };

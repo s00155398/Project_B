@@ -69,7 +69,12 @@ void AItem_Pistol::SpawnProjectile()
 	}
 }
 
-void AItem_Pistol::Equip(AProtagonist* Character)
+void AItem_Pistol::Swap(bool val)
+{
+	Super::Swap(val);
+}
+
+void AItem_Pistol::EquipOnPrompt(AProtagonist* Character)
 {
 	if (Character)
 	{
@@ -103,11 +108,5 @@ void AItem_Pistol::Equip(AProtagonist* Character)
 			}
 		}
 	}
-
-}
-
-void AItem_Pistol::Swap(bool val)
-{
-	Super::Swap(val);
 }
 

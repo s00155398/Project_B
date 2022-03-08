@@ -57,4 +57,6 @@ public:
 	virtual void AttachToRight();
 	UFUNCTION()
 	virtual void AttachToLeft();
+	UFUNCTION()
+	virtual void EquipOnPrompt(AProtagonist* Character);
 };

@@ -42,5 +42,5 @@ public:
 
 	virtual void AttachToLeft() override;
 
-	virtual void Equip(class AProtagonist* Character) override;
+	virtual void EquipOnPrompt(AProtagonist* Character) override;
 };

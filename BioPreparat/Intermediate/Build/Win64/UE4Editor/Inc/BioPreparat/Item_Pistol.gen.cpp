@@ -319,7 +319,7 @@ void EmptyLinkFunctionForGeneratedCodeItem_Pistol() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AItem_Pistol, 2779941369);
+	IMPLEMENT_CLASS(AItem_Pistol, 1627763339);
 	template<> BIOPREPARAT_API UClass* StaticClass<AItem_Pistol>()
 	{
 		return AItem_Pistol::StaticClass();

@@ -156,7 +156,7 @@ void EmptyLinkFunctionForGeneratedCodeItem_Candle() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AItem_Candle, 3709502114);
+	IMPLEMENT_CLASS(AItem_Candle, 1786156611);
 	template<> BIOPREPARAT_API UClass* StaticClass<AItem_Candle>()
 	{
 		return AItem_Candle::StaticClass();

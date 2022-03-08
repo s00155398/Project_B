@@ -84,6 +84,14 @@ void EmptyLinkFunctionForGeneratedCodeItem() {}
 		}
 		return ReturnEnum;
 	}
+	DEFINE_FUNCTION(AItem::execEquipOnPrompt)
+	{
+		P_GET_OBJECT(AProtagonist,Z_Param_Character);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->EquipOnPrompt(Z_Param_Character);
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(AItem::execAttachToLeft)
 	{
 		P_FINISH;
@@ -152,6 +160,7 @@ void EmptyLinkFunctionForGeneratedCodeItem() {}
 			{ "AttachToLeft", &AItem::execAttachToLeft },
 			{ "AttachToRight", &AItem::execAttachToRight },
 			{ "Equip", &AItem::execEquip },
+			{ "EquipOnPrompt", &AItem::execEquipOnPrompt },
 			{ "OnOverlapBegin", &AItem::execOnOverlapBegin },
 			{ "OnOverlapEnd", &AItem::execOnOverlapEnd },
 			{ "PlayEquipSound", &AItem::execPlayEquipSound },
@@ -232,6 +241,38 @@ void EmptyLinkFunctionForGeneratedCodeItem() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AItem_Equip_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_AItem_EquipOnPrompt_Statics
+	{
+		struct Item_eventEquipOnPrompt_Parms
+		{
+			AProtagonist* Character;
+		};
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Character;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::NewProp_Character = { "Character", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(Item_eventEquipOnPrompt_Parms, Character), Z_Construct_UClass_AProtagonist_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::NewProp_Character,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Item.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AItem, nullptr, "EquipOnPrompt", nullptr, nullptr, sizeof(Item_eventEquipOnPrompt_Parms), Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020400, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AItem_EquipOnPrompt()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AItem_EquipOnPrompt_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -475,6 +516,7 @@ void EmptyLinkFunctionForGeneratedCodeItem() {}
 		{ &Z_Construct_UFunction_AItem_AttachToLeft, "AttachToLeft" }, // 230859294
 		{ &Z_Construct_UFunction_AItem_AttachToRight, "AttachToRight" }, // 2774247899
 		{ &Z_Construct_UFunction_AItem_Equip, "Equip" }, // 3350822493
+		{ &Z_Construct_UFunction_AItem_EquipOnPrompt, "EquipOnPrompt" }, // 3482473335
 		{ &Z_Construct_UFunction_AItem_OnOverlapBegin, "OnOverlapBegin" }, // 3024575868
 		{ &Z_Construct_UFunction_AItem_OnOverlapEnd, "OnOverlapEnd" }, // 3006345643
 		{ &Z_Construct_UFunction_AItem_PlayEquipSound, "PlayEquipSound" }, // 412488294
@@ -555,7 +597,7 @@ void EmptyLinkFunctionForGeneratedCodeItem() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AItem, 2286532134);
+	IMPLEMENT_CLASS(AItem, 611177277);
 	template<> BIOPREPARAT_API UClass* StaticClass<AItem>()
 	{
 		return AItem::StaticClass();

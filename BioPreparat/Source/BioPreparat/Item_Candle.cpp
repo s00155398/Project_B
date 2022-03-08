@@ -15,16 +15,6 @@ AItem_Candle::AItem_Candle() {
 void AItem_Candle::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp,  OtherBodyIndex,  bFromSweep, SweepResult);
-	/*
-	if (OtherActor && (ItemState == EItemState::EIS_Pickup))
-	{
-		AProtagonist* Main = Cast<AProtagonist>(OtherActor);
-		if (Main)
-		{
-			Equip(Main);
-		}
-	}
-	*/
 }
 
 
@@ -33,35 +23,9 @@ void AItem_Candle::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
 	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp,  OtherBodyIndex);
 }
 
-void AItem_Candle::Equip(AProtagonist* Character)
+void AItem_Candle::EquipOnPrompt(AProtagonist* Character)
 {
-	if (Character)
-	{
-		OwningCharacter = Character;
-
-		if (OwningCharacter)
-		{
-			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right)) // if the pistol is equipped
-			{
-				this->Swap(true);
-				AttachToLeft();	
-			}
-			else
-			{
-				this->Swap(true);
-
-				AttachToRight();
-				ItemState = EItemState::EIS_Equipped;
-
-				if (!bCandleParticles)
-				{
-					CandleParticle->Deactivate();
-				}
-			}
-		}
-		OwningCharacter->HeldEquipment.Add(this);
-		ItemState = EItemState::EIS_Equipped;
-	}
+	Super::EquipOnPrompt(Character);
 }
 
 

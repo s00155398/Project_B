@@ -20,6 +20,7 @@ struct FHitResult;
 #define BioPreparat_Source_BioPreparat_Item_h_17_SPARSE_DATA
 #define BioPreparat_Source_BioPreparat_Item_h_17_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execEquipOnPrompt); \
 	DECLARE_FUNCTION(execAttachToLeft); \
 	DECLARE_FUNCTION(execAttachToRight); \
 	DECLARE_FUNCTION(execEquip); \
@@ -31,6 +32,7 @@ struct FHitResult;
 
 #define BioPreparat_Source_BioPreparat_Item_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execEquipOnPrompt); \
 	DECLARE_FUNCTION(execAttachToLeft); \
 	DECLARE_FUNCTION(execAttachToRight); \
 	DECLARE_FUNCTION(execEquip); \

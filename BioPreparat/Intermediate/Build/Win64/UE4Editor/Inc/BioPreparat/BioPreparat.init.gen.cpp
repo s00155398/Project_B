@@ -21,7 +21,7 @@ void EmptyLinkFunctionForGeneratedCodeBioPreparat_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0xD538A634,
+				0xD9AF63E4,
 				0xB3F94763,
 				METADATA_PARAMS(nullptr, 0)
 			};

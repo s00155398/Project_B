@@ -19,28 +19,6 @@ void AItem_FlashLight::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 }
 
-void AItem_FlashLight::Equip(AProtagonist* Character)
-{
-	if (Character){
-
-		OwningCharacter = Character;
-
-		if (OwningCharacter) {
-
-			if (AItem_Pistol* Pistol = Cast<AItem_Pistol>(OwningCharacter->CurrentEquippedItem_Right)){
-				 this->Swap(true);
-				 AttachToLeft();
-			}
-			else {
-				this->Swap(true);
-				AttachToRight();
-			}
-		}
-		OwningCharacter->HeldEquipment.Add(this);
-		ItemState = EItemState::EIS_Equipped;
-	}
-}
-
 void AItem_FlashLight::ToggleLight()
 {
 	if (FlashLight)
@@ -111,4 +89,9 @@ void AItem_FlashLight::AttachToLeft()
 		UE_LOG(LogTemp, Warning, TEXT("Candle Equipped on Left"));
 		OwningCharacter->CurrentEquippedItem_Left = this;
 	}
+}
+
+void AItem_FlashLight::EquipOnPrompt(AProtagonist* Character)
+{
+	Super::EquipOnPrompt(Character);
 }

@@ -139,7 +139,7 @@ void EmptyLinkFunctionForGeneratedCodeItem_FlashLight() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AItem_FlashLight, 3216594456);
+	IMPLEMENT_CLASS(AItem_FlashLight, 1524383067);
 	template<> BIOPREPARAT_API UClass* StaticClass<AItem_FlashLight>()
 	{
 		return AItem_FlashLight::StaticClass();
